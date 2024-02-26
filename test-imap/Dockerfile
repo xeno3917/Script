@@ -2,12 +2,12 @@
 FROM alpine:latest
 
 # Installation de Dovecot
-RUN apk --no-cache add dovecot dovecot-pop3d sqlite3
+RUN apk --no-cache add dovecot sqlite
 
 RUN mkdir /var/default
 
 RUN openssl req -new -x509 -days 3650 -nodes -out /var/default/dovecot.pem -keyout /var/default/dovecot.key -subj "/C=FR/ST=None/L=None/O=None/CN=www.example.com"
-RUN chmod 600 /etc/dovecot/dovecot.key
+RUN chmod 600 /var/default/dovecot.key
 
 RUN echo "protocols = imap" >> /var/default/dovecot.conf \
     && echo "!include auth-sql.conf.ext" >> /var/default/dovecot.conf \
