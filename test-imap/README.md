@@ -23,3 +23,10 @@ pour tester la connexion (depuis le conteneur) :
 Journaux (deux emplacements) :
 - Importants : `docker logs <nom>`
 - les infos : /var/log/dovecot.log
+
+Pour faire des backup/resto de mails (BAL Complete/incrementiel) :
+```
+docker run --rm gilleslamiral/imapsync imapsync \
+--host1 <IP/Domaine>  --user1 <User/Mail>  --password1 '<Password>' \
+--host2 <IP/Domaine>  --user2 <User/Mail>  --password2 '<Password>'
+```
