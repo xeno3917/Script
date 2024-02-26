@@ -1,5 +1,5 @@
 Image pour Docker-compose :
-#############################################
+```
 version: '3'
 
 services:
@@ -12,14 +12,14 @@ services:
       -  /path/conf:/etc/dovecot
       -  /path/mail:/var/mail
     restart: always
-###########################################
+```
 
 Pour ajouter un user (avec sqlite3) :
-sqlite3 <chemin>/mail.db INSERT INTO users (userid, domain, password, home, uid, gid) VALUES ('user','exemple.com','<MD5-Password>','/var/mail/user.exemple.com',1000,1000)
+- `sqlite3 <chemin>/mail.db INSERT INTO users (userid, domain, password, home, uid, gid) VALUES ('user','exemple.com','<MD5-Password>','/var/mail/user.exemple.com',1000,1000)`
 
 pour tester la connexion (depuis le conteneur) :
-doveadm auth test <mail> <password>
+- `doveadm auth test <mail> <password>`
 
 Journaux (deux emplacements) :
-Importants : docker logs <nom>
-les infos : /var/log/dovecot.log
+- Importants : `docker logs <nom>`
+- les infos : /var/log/dovecot.log
