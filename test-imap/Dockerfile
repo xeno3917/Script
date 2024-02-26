@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Installation de Dovecot
-RUN apk --no-cache add dovecot sqlite
+RUN apk --no-cache add dovecot dovecot-sqlite sqlite
 
 RUN mkdir /var/default
 
