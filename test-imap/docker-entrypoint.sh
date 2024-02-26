@@ -24,17 +24,8 @@ fi
 
 if [ ! -f "/etc/dovecot/mail.db" ]; then
     # Création de la base de données SQLite et de la table
-    sqlite3 /etc/dovecot/mail.db \
-    && echo "CREATE TABLE users (" \
-    && echo "  userid VARCHAR(128) NOT NULL," \
-    && echo "  domain VARCHAR(128) NOT NULL," \
-    && echo "  password VARCHAR(64) NOT NULL," \
-    && echo "  home VARCHAR(255) NOT NULL," \
-    && echo "  uid INTEGER NOT NULL," \
-    && echo "  gid INTEGER NOT NULL" \
-    && echo ");" \
-    | sqlite3 /etc/dovecot/mail.db
+    sqlite3 /etc/dovecot/mail.db 'CREATE TABLE IF NOT EXISTS users (userid VARCHAR(128) NOT NULL, domain VARCHAR(128) NOT NULL, password VARCHAR(64) NOT NULL, home VARCHAR(255) NOT NULL, uid INTEGER NOT NULL, gid INTEGER NOT NULL);'
 fi
 
 # Démarrer Dovecot
-exec "$@"
+exec dovecot -F
