@@ -34,9 +34,32 @@ RUN echo "protocols = imap" >> /var/default/dovecot.conf \
     && echo "user_query = SELECT home, uid, gid FROM users WHERE userid = '%n' AND domain = '%d'" >> /var/default/dovecot-sql.conf.ext \
     && echo "iterate_query = SELECT userid AS username, domain FROM users" >> /var/default/dovecot-sql.conf.ext
 
-# Copie des fichiers de configuration et de la base de données uniquement s'ils n'existent pas déjà
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# Copie des fichiers de configuration et création de la base de données
+RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo 'if [ ! -f "/etc/dovecot/dovecot.conf" ]; then' >> /docker-entrypoint.sh && \
+    echo '    echo "Création de /etc/dovecot/dovecot.conf..."' >> /docker-entrypoint.sh && \
+    echo '    cp /var/default/dovecot.conf /etc/dovecot/dovecot.conf' >> /docker-entrypoint.sh && \
+    echo 'fi' >> /docker-entrypoint.sh && \
+    echo 'if [ ! -f "/etc/dovecot/auth-sql.conf.ext" ]; then' >> /docker-entrypoint.sh && \
+    echo '    echo "Création de /etc/dovecot/auth-sql.conf.ext..."' >> /docker-entrypoint.sh && \
+    echo '    cp /var/default/auth-sql.conf.ext /etc/dovecot/auth-sql.conf.ext' >> /docker-entrypoint.sh && \
+    echo 'fi' >> /docker-entrypoint.sh && \
+    echo 'if [ ! -f "/etc/dovecot/dovecot.pem" ]; then' >> /docker-entrypoint.sh && \
+    echo '    echo "Création de /etc/dovecot/dovecot.pem..."' >> /docker-entrypoint.sh && \
+    echo '    cp /var/default/dovecot.pem /etc/dovecot/dovecot.pem' >> /docker-entrypoint.sh && \
+    echo '    cp /var/default/dovecot.key /etc/dovecot/dovecot.key' >> /docker-entrypoint.sh && \
+    echo 'fi' >> /docker-entrypoint.sh && \
+    echo 'if [ ! -f "/etc/dovecot/dovecot-sql.conf.ext" ]; then' >> /docker-entrypoint.sh && \
+    echo '    echo "Création de /etc/dovecot/dovecot-sql.conf.ext..."' >> /docker-entrypoint.sh && \
+    echo '    cp /var/default/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext' >> /docker-entrypoint.sh && \
+    echo 'fi' >> /docker-entrypoint.sh && \
+    echo 'if [ ! -f "/etc/dovecot/mail.db" ]; then' >> /docker-entrypoint.sh && \
+    echo '    echo "Création de /etc/dovecot/mail.db..."' >> /docker-entrypoint.sh && \
+    echo '    sqlite3 /etc/dovecot/mail.db "CREATE TABLE IF NOT EXISTS users (userid VARCHAR(128) NOT NULL, domain VARCHAR(128) NOT NULL, password VARCHAR(64) NOT NULL, home VARCHAR(255) NOT NULL, uid INTEGER NOT NULL, gid INTEGER NOT NULL);"' >> /docker-entrypoint.sh && \
+    echo 'fi' >> /docker-entrypoint.sh && \
+    echo 'echo "Démarrage de Dovecot..."' >> /docker-entrypoint.sh && \
+    echo 'exec dovecot -F' >> /docker-entrypoint.sh && \
+    chmod +x /docker-entrypoint.sh
 
 # Commande par défaut pour démarrer le conteneur
 CMD ["/docker-entrypoint.sh"]
