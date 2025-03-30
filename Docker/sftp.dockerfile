@@ -12,7 +12,7 @@ RUN apk add --no-cache openssh && \
     echo "    ForceCommand internal-sftp" >> /etc/ssh/sshd_config && \
     echo "    AllowTcpForwarding no" >> /etc/ssh/sshd_config && \
     ssh-keygen -A && \
-    echo 'sftp:$6$kgsqrLvJorL62Ox6$T7TkR4i7JF2eEv2g7aiuZroBkFfwEsTHrqXQAoYl7phwEmUuxG.r3IjPUiNoiOXxwnuS8ngFRJqyo2sf/0pGy/'
+    echo 'sftp:$6$kgsqrLvJorL62Ox6$T7TkR4i7JF2eEv2g7aiuZroBkFfwEsTHrqXQAoYl7phwEmUuxG.r3IjPUiNoiOXxwnuS8ngFRJqyo2sf/0pGy/' | chpasswd -e
 
 EXPOSE 22
 
