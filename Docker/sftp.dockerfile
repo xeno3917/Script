@@ -8,7 +8,7 @@ RUN apk add --no-cache openssh && \
     chown root:root /sftp/keepass && chmod 755 /sftp/keepass && \
     mkdir -p /sftp/keepass/keepass && chown keepass:keepass /sftp/keepass/keepass && \
     echo "Match User keepass" >> /etc/ssh/sshd_config && \
-    echo "    ChrootDirectory /sftp/sftp" >> /etc/ssh/sshd_config && \
+    echo "    ChrootDirectory /sftp/keepass" >> /etc/ssh/sshd_config && \
     echo "    ForceCommand internal-sftp" >> /etc/ssh/sshd_config && \
     echo "    AllowTcpForwarding no" >> /etc/ssh/sshd_config && \
     ssh-keygen -A && \
